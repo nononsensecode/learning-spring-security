@@ -4,21 +4,22 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.password.NoOpPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
-import javax.sql.DataSource;
 
 @EnableWebSecurity
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
-    private final DataSource dataSource;
+    private final UserDetailsService userDetailsService;
 
     @Autowired
-    public WebSecurityConfig(DataSource dataSource) {
-        this.dataSource = dataSource;
+    public WebSecurityConfig(UserDetailsService userDetailsService) {
+        this.userDetailsService = userDetailsService;
     }
 
     @Override
@@ -31,15 +32,19 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                     .hasAnyRole("USER", "ADMIN")
                 .antMatchers("/").permitAll()
                 .and()
-                .formLogin();
+                    .formLogin();
+    }
+
+    @Override
+    public void configure(WebSecurity web) throws Exception {
+        web
+                .ignoring()
+                .antMatchers("/h2-console/**");
     }
 
     @Override
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
-        auth.jdbcAuthentication()
-                .dataSource(dataSource);
-//                .usersByUsernameQuery("SELECT username, password, enabled FROM users WHERE username = ?")
-//                .authoritiesByUsernameQuery("SELECT username, authority FROM authorities WHERE username = ?");
+        auth.userDetailsService(userDetailsService);
     }
 
     @Bean

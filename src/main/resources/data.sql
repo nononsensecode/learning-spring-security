@@ -1,5 +1,2 @@
-INSERT INTO users values ('user', 'pass', true);
-INSERT INTO users values ('admin', 'pass', true);
-
-INSERT INTO authorities values ('user', 'ROLE_USER');
-INSERT INTO authorities values ('admin', 'ROLE_ADMIN');
+INSERT INTO secured_user (id, username, password, active, roles) values (1, 'kaushik', 'password', 'Y', 'ROLE_USER');
+INSERT INTO secured_user (id, username, password, active, roles) values (2, 'testing', 'password', 'Y', 'ROLE_USER,ROLE_ADMIN');
