@@ -23,9 +23,6 @@ tasks.withType(Test::class.java) {
 dependencies {
     implementation("org.springframework.boot:spring-boot-starter-web")
     implementation("org.springframework.boot:spring-boot-starter-security")
-    implementation("com.unboundid:unboundid-ldapsdk")
-    implementation("org.springframework.ldap:spring-ldap-core")
-    implementation("org.springframework.security:spring-security-ldap")
-    testImplementation("org.springframework.boot:spring-boot-starter-test")
-    testImplementation("org.springframework.security:spring-security-test")
+    implementation("io.jsonwebtoken:jjwt:0.9.1")
+    implementation("javax.xml.bind:jaxb-api:2.3.1")
 }
